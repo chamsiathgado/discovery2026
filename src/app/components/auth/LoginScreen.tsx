@@ -108,7 +108,6 @@ export function LoginScreen({ onLogin, onSwitchToRegister }: LoginScreenProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="administrateur">Administrateur</SelectItem>
-                    <SelectItem value="operateur">Opérateur</SelectItem>
                     <SelectItem value="client">Client</SelectItem>
                   </SelectContent>
                 </Select>

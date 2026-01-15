@@ -16,7 +16,7 @@ export function RegisterScreen({ onRegister, onSwitchToLogin }: RegisterScreenPr
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('operateur');
+  const [role, setRole] = useState('client');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -127,7 +127,6 @@ export function RegisterScreen({ onRegister, onSwitchToLogin }: RegisterScreenPr
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="administrateur">Administrateur</SelectItem>
-                    <SelectItem value="operateur">Opérateur</SelectItem>
                     <SelectItem value="client">Client</SelectItem>
                   </SelectContent>
                 </Select>

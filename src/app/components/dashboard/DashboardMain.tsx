@@ -171,10 +171,12 @@ export function DashboardMain({ user, onLogout }: DashboardMainProps) {
                 <Brain className="w-4 h-4" />
                 IA
               </TabsTrigger>
+              {user.role === 'administrateur' && (
               <TabsTrigger value="management" className="flex items-center gap-2">
                 <Settings className="w-4 h-4" />
                 Gestion
               </TabsTrigger>
+              )}
             </TabsList>
 
             {criticalStations > 0 && (
@@ -252,6 +254,7 @@ export function DashboardMain({ user, onLogout }: DashboardMainProps) {
           </TabsContent>
 
           {/* Management Tab */}
+          {user.role === 'administrateur' && (
           <TabsContent value="management">
             <ManagementPanel
               stations={stations}
@@ -260,6 +263,7 @@ export function DashboardMain({ user, onLogout }: DashboardMainProps) {
               onStationAdd={handleStationAdd}
             />
           </TabsContent>
+          )}
         </Tabs>
       </main>
     </div>
