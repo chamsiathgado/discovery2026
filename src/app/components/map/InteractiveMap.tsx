@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { Icon, LatLngTuple } from 'leaflet';
 import { Station, BorneStatus, mockStations } from '@/app/data/mockData';
-import { Card } from '@/app/components/ui/card';
 import { Badge } from '@/app/components/ui/badge';
 import { Button } from '@/app/components/ui/button';
 import { MapPin, Zap, AlertTriangle, Wrench, Activity } from 'lucide-react';
@@ -117,12 +116,12 @@ export function InteractiveMap({ onStationClick, selectedCity }: InteractiveMapP
     : mockStations;
 
   return (
-    <Card className="h-full overflow-hidden">
+    <div className="h-full w-full overflow-hidden rounded-lg border border-gray-200 bg-white">
       <MapContainer
         center={beninCenter}
         zoom={7}
-        style={{ height: '100%', width: '100%' }}
-        className="z-0"
+        style={{ height: '100%', width: '100%', minHeight: '500px' }}
+        className="leaflet-container"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -211,6 +210,6 @@ export function InteractiveMap({ onStationClick, selectedCity }: InteractiveMapP
           </Marker>
         ))}
       </MapContainer>
-    </Card>
+    </div>
   );
 }

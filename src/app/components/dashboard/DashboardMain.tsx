@@ -227,12 +227,12 @@ export function DashboardMain({ user, onLogout }: DashboardMainProps) {
             </div>
 
             <div className="flex items-center gap-3">
-              <Select value={selectedCity} onValueChange={setSelectedCity}>
+              <Select value={selectedCity || 'all'} onValueChange={(value) => setSelectedCity(value === 'all' ? '' : value)}>
                 <SelectTrigger className="w-[200px]">
                   <SelectValue placeholder="Toutes les villes" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Toutes les villes</SelectItem>
+                  <SelectItem value="all">Toutes les villes</SelectItem>
                   <SelectItem value="Cotonou">Cotonou</SelectItem>
                   <SelectItem value="Porto-Novo">Porto-Novo</SelectItem>
                   <SelectItem value="Parakou">Parakou</SelectItem>
