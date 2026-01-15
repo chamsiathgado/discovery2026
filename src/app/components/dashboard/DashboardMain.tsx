@@ -19,6 +19,7 @@ import {
   Users,
   Navigation,
   CreditCard,
+  ChevronDown,
 } from 'lucide-react';
 import { InteractiveMap } from '@/app/components/map/InteractiveMap';
 import { StationDetailPanel } from '@/app/components/dashboard/StationDetailPanel';
@@ -50,7 +51,6 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
   const [user, setUser] = useState(initialUser);
   const { theme, setTheme } = useTheme();
 
-  // Define available tabs based on user role
   const getAvailableTabs = () => {
     const baseTabs = [
       { id: 'overview', label: 'Vue d\'ensemble', icon: LayoutDashboard },
@@ -69,7 +69,6 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
 
   const availableTabs = getAvailableTabs();
 
-  // Calculate global stats
   const totalBornes = stations.reduce((sum, s) => sum + s.bornes.length, 0);
   const activeBornes = stations.reduce(
     (sum, s) => sum + s.bornes.filter((b) => b.status === 'active').length,
@@ -104,55 +103,75 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-        <div className="px-6 py-4">
+    <div className="min-h-screen bg-background">
+      {/* Header avec effet glassmorphism */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-black/80 border-b border-border">
+        <div className="px-6 py-3">
           <div className="flex items-center justify-between">
+            {/* Logo & Branding */}
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-white" />
+              <div className="flex items-center gap-3 group">
+                <div className="relative">
+                  <img 
+                    src="/logo_kemet.png" 
+                    alt="KEMET Automotive" 
+                    className="w-11 h-11 object-contain transition-transform group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <div className="w-11 h-11 bg-gradient-to-br from-[#306754] to-[#4a8c74] rounded-2xl flex items-center justify-center hidden shadow-lg shadow-[#306754]/20">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#306754]/20 to-transparent rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                    KEMET Platform
+                  <h1 className="text-xl font-semibold text-foreground tracking-tight">
+                    KEMET Automotive
                   </h1>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Gestion Intelligente - Réseau Bénin
+                  <p className="text-[10px] text-muted-foreground font-medium tracking-wide uppercase">
+                    Réseau Intelligent Bénin
                   </p>
                 </div>
               </div>
             </div>
 
+            {/* Stats & Actions */}
             <div className="flex items-center gap-3">
-              {/* Global Stats */}
-              <div className="hidden lg:flex items-center gap-4 mr-4 px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-emerald-600" />
+              {/* Stats compactes */}
+              <div className="hidden lg:flex items-center gap-3 mr-2">
+                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-accent/50 to-accent/30 rounded-xl border border-border/50 backdrop-blur-sm">
+                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <Activity className="w-4 h-4 text-primary" />
+                  </div>
                   <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Bornes actives</div>
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">
-                      {activeBornes}/{totalBornes}
+                    <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Bornes</div>
+                    <div className="text-sm font-bold text-foreground">
+                      {activeBornes}<span className="text-muted-foreground">/{totalBornes}</span>
                     </div>
                   </div>
                 </div>
-                <div className="w-px h-8 bg-gray-300 dark:bg-gray-600" />
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-blue-600" />
+                
+                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-accent/50 to-accent/30 rounded-xl border border-border/50 backdrop-blur-sm">
+                  <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-primary" />
+                  </div>
                   <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">Occupation moy.</div>
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">
+                    <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Taux</div>
+                    <div className="text-sm font-bold text-foreground">
                       {avgOccupancy.toFixed(0)}%
                     </div>
                   </div>
                 </div>
               </div>
 
+              {/* Theme Toggle */}
               <Button
                 variant="outline"
                 size="icon"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="rounded-xl border-border/50 hover:bg-accent/50 backdrop-blur-sm"
               >
                 {theme === 'dark' ? (
                   <Sun className="h-4 w-4" />
@@ -161,12 +180,13 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
                 )}
               </Button>
 
-              <div className="flex items-center gap-3 pl-3 border-l border-gray-300 dark:border-gray-600">
+              {/* User Menu */}
+              <div className="flex items-center gap-3 pl-3 border-l border-border/50">
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-foreground">
                     {user.name}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                  <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">
                     {user.role}
                   </p>
                 </div>
@@ -174,7 +194,7 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
                   variant="outline"
                   size="icon"
                   onClick={onLogout}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="rounded-xl border-red-200 hover:bg-red-50 hover:border-red-300 text-red-600 dark:border-red-900/50 dark:hover:bg-red-950/50"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -188,20 +208,24 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
       <main className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex items-center justify-between">
-            <TabsList className={`grid w-full`} style={{ gridTemplateColumns: `repeat(${availableTabs.length}, minmax(0, 1fr))` }}>
+            <TabsList className="bg-card/50 backdrop-blur-sm border border-border/50 p-1 rounded-xl shadow-sm">
               {availableTabs.map((tab) => {
                 const IconComponent = tab.icon;
                 return (
-                  <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-2">
+                  <TabsTrigger 
+                    key={tab.id} 
+                    value={tab.id} 
+                    className="flex items-center gap-2 rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-primary data-[state=active]:to-primary/90 data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 transition-all"
+                  >
                     <IconComponent className="w-4 h-4" />
-                    {tab.label}
+                    <span className="hidden sm:inline">{tab.label}</span>
                   </TabsTrigger>
                 );
               })}
             </TabsList>
 
             {criticalStations > 0 && (
-              <Badge variant="destructive" className="flex items-center gap-2">
+              <Badge variant="destructive" className="flex items-center gap-2 px-3 py-1 rounded-lg shadow-lg shadow-red-500/20">
                 <AlertTriangle className="w-3 h-3" />
                 {criticalStations} station(s) critique(s)
               </Badge>
@@ -220,12 +244,12 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
           {/* Map Tab */}
           <TabsContent value="map" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 h-[600px]">
+              <Card className="lg:col-span-2 h-[600px] overflow-hidden border-border/50 shadow-xl">
                 <InteractiveMap
                   onStationClick={setSelectedStation}
                   selectedCity={selectedCity}
                 />
-              </div>
+              </Card>
               <div className="lg:col-span-1">
                 {selectedStation ? (
                   <StationDetailPanel
@@ -234,13 +258,15 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
                     onUpdate={handleStationUpdate}
                   />
                 ) : (
-                  <Card className="h-full flex items-center justify-center">
+                  <Card className="h-full flex items-center justify-center border-border/50 shadow-xl bg-gradient-to-br from-card to-accent/20">
                     <div className="text-center p-8">
-                      <Map className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                      <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Map className="w-10 h-10 text-primary" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
                         Sélectionnez une station
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         Cliquez sur un marqueur pour voir les détails
                       </p>
                     </div>
@@ -251,10 +277,10 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
 
             <div className="flex items-center gap-3">
               <Select value={selectedCity || 'all'} onValueChange={(value) => setSelectedCity(value === 'all' ? '' : value)}>
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[200px] rounded-xl border-border/50 bg-card/50 backdrop-blur-sm">
                   <SelectValue placeholder="Toutes les villes" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl">
                   <SelectItem value="all">Toutes les villes</SelectItem>
                   <SelectItem value="Cotonou">Cotonou</SelectItem>
                   <SelectItem value="Porto-Novo">Porto-Novo</SelectItem>
@@ -262,7 +288,7 @@ export function DashboardMain({ user: initialUser, onLogout }: DashboardMainProp
                 </SelectContent>
               </Select>
               {selectedCity && (
-                <Button variant="outline" size="sm" onClick={() => setSelectedCity('')}>
+                <Button variant="outline" size="sm" onClick={() => setSelectedCity('')} className="rounded-xl">
                   Réinitialiser
                 </Button>
               )}
