@@ -11,6 +11,7 @@ interface User {
   name: string;
   email: string;
   role: string;
+  kwBalance: number; // Solde en kW
 }
 
 export default function App() {
@@ -18,12 +19,12 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
 
   const handleLogin = (email: string, password: string, role: string) => {
-    setUser({ name: email.split('@')[0], email, role });
+    setUser({ name: email.split('@')[0], email, role, kwBalance: 25 }); // Solde initial de 25 kW
     setCurrentScreen('dashboard');
   };
 
   const handleRegister = (name: string, email: string, password: string, role: string) => {
-    setUser({ name, email, role });
+    setUser({ name, email, role, kwBalance: 0 }); // Nouveau utilisateur commence avec 0 kW
     setCurrentScreen('dashboard');
   };
 
